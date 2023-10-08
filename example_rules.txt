@@ -1,0 +1,2 @@
+rt_([a-zA-Z]+)=>ccl_$1
+RT([a-zA-Z]+)=>CCL$1
