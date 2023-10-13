@@ -48,7 +48,11 @@ func loadIgnoreList(filePath string) ([]*regexp.Regexp, error) {
 	var ignoreList []*regexp.Regexp
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
-		re, err := regexp.Compile(scanner.Text())
+		var ignore = scanner.Text()
+		if ignore == "" {
+			continue
+		}
+		re, err := regexp.Compile(ignore)
 		if err != nil {
 			return nil, err
 		}
@@ -69,7 +73,7 @@ func renameFilesAndContent(root string, rules map[*regexp.Regexp]string, ignoreL
 		}
 
 		for _, ignore := range ignoreList {
-			if ignore.MatchString(info.Name()) {
+			if ignore.MatchString(path) {
 				if info.IsDir() {
 					return filepath.SkipDir
 				} else {
